@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Mocha Tests</title>
+    <link rel="stylesheet" href="node_modules/mocha/mocha.css" />
+</head>
+<body>
+    <div id="mocha"></div>
+    <script src="node_modules/mocha/mocha.js"></script>
+    <script src="node_modules/chai/chai.js"></script>
+    <script>mocha.setup('bdd')</script>
+
+    <!-- load code you want to test here -->
+    <!-- For example -->
+    <script src="content/js/className.js"></script>
+
+    <!-- load your test files here -->
+    <!-- For example -->
+    <script src="content/test/classNameTest.js"></script>
+    <script>
+        mocha.run();
+    </script>
+</body>
+</html>
