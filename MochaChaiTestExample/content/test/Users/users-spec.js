@@ -3,6 +3,7 @@ describe('Users Service', function () {
 
     var UsersService, $http, $scope, $controller;
     var getUsersDataSpy, getUserByIdSpy, getUsersByLocationSpy;
+    var serviceResponse;
 
     // Load our api.users module
     beforeEach(angular.mock.module('api.users'));
@@ -10,8 +11,8 @@ describe('Users Service', function () {
     // Set our injected Users service (_Users_) to our local Users variable
     beforeEach(inject(function ($rootScope,_$controller_, _UsersService_, $httpBackend) {
         UsersService = _UsersService_;
-        $http= $httpBackend;
-        $http.when("POST", "/Users/getUsersData").respond({
+        $http = $httpBackend;
+        serviceResponse = {
             Status: true,
             Data: [
                     {
@@ -47,10 +48,12 @@ describe('Users Service', function () {
                         name: 'John',
                         role: 'Tester',
                         location: 'New York',
-                        twitter : 'dabill'
+                        twitter: 'dabill'
                     }
-                ]
-        });
+            ]
+        }
+
+        $http.when("POST", "/Users/getUsersData").respond(serviceResponse);
 
         $controller = _$controller_;
         $scope = $rootScope.$new();
@@ -87,6 +90,11 @@ describe('Users Service', function () {
             chai.assert(getUsersDataSpy.calledOnce, true);
         });
 
+        it('should return some response value', function () {
+            var getUsersDataSpyCall = getUsersDataSpy.getCall(0);
+            chai.expect(getUsersDataSpyCall.returnValue.$$state.value).to.eql(serviceResponse);
+        });
+
         it('should call "getUsersData()" service method before "findUserById()" and "findUsersByLocation()" controller methods.', function () {
             chai.assert(getUsersDataSpy.calledBefore(findUserByIdSpy), true);
             chai.assert(getUsersDataSpy.calledBefore(findUsersByLocationSpy), true);
@@ -116,9 +124,14 @@ describe('Users Service', function () {
         it('should call "getUserData()" service method before "findUserById()" controller method.', function () {
             chai.assert(getUsersDataSpy.calledBefore(findUserByIdSpy), true);
         });
-        
+
         it('should call "findUserById()" controller method.', function () {
             chai.assert(findUserByIdSpy.called, true);
+        });
+
+        it('should not return any response value.', function () {
+            var findUserByIdSpyCall = findUserByIdSpy.getCall(0);
+            chai.expect(findUserByIdSpyCall.returnValue).to.be.an('undefined');
         });
 
         it('should call "findUserById()" controller method after "getUsersData()" service method', function () {
