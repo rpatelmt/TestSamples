@@ -66,7 +66,7 @@ describe('Users Service', function () {
 
     // A simple test to verify the Users service exists
     describe('User Service', function () {
-        it('should exist', function () {
+        it('should exist.', function () {
             chai.expect(UsersService).to.not.an('undefined');
         });
     });
@@ -82,7 +82,7 @@ describe('Users Service', function () {
             chai.assert(getUsersDataSpy.callCount, 1);
         });
 
-        it('should call "getUsersData()" service method at least once', function () {
+        it('should call "getUsersData()" service method at least once.', function () {
             chai.assert(getUsersDataSpy.called, true);
         });
 
@@ -90,21 +90,16 @@ describe('Users Service', function () {
             chai.assert(getUsersDataSpy.calledOnce, true);
         });
 
-        it('should return some response value', function () {
+        it('should return some response value.', function () {
             var getUsersDataSpyCall = getUsersDataSpy.getCall(0);
-            chai.expect(getUsersDataSpyCall.returnValue.$$state.value).to.eql(serviceResponse);
+            chai.expect($scope.usersInfo).to.eql(serviceResponse.Data);
         });
 
-        it('should call "getUsersData()" service method before "findUserById()" and "findUsersByLocation()" controller methods.', function () {
-            chai.assert(getUsersDataSpy.calledBefore(findUserByIdSpy), true);
-            chai.assert(getUsersDataSpy.calledBefore(findUsersByLocationSpy), true);
-        });
-
-        it('Users Info should exist', function () {
+        it('Users Info should exist.', function () {
             chai.expect($scope.usersInfo).to.not.an('undefined');
         });
 
-        it('Number of Users should be 5', function () {
+        it('Number of Users should be 5.', function () {
             chai.expect($scope.usersInfo.length).to.eql(5);
         });
     });
@@ -134,7 +129,7 @@ describe('Users Service', function () {
             chai.expect(findUserByIdSpyCall.returnValue).to.be.an('undefined');
         });
 
-        it('should call "findUserById()" controller method after "getUsersData()" service method', function () {
+        it('should call "findUserById()" controller method after "getUsersData()" service method.', function () {
             chai.assert(findUserByIdSpy.calledAfter(getUsersDataSpy), true);
         });
 
@@ -142,7 +137,11 @@ describe('Users Service', function () {
             chai.assert(findUserByIdSpy.calledWith(2), true);
         });
 
-        it('User with user id 2 should exist', function () {
+        it('should not call "findUserById()" controller method with argument user Id 6.', function () {
+            chai.assert(findUserByIdSpy.neverCalledWith(6), true);
+        });
+
+        it('User with user id 2 should exist.', function () {
             chai.expect($scope.userInfoById).to.not.an('undefined');
         });
 
@@ -173,12 +172,16 @@ describe('Users Service', function () {
             chai.assert(findUsersByLocationSpy.called, true);
         });
 
-        it('should call "findUsersByLocation()" controller method after "getUsersData()" service method', function () {
+        it('should call "findUsersByLocation()" controller method after "getUsersData()" service method.', function () {
             chai.assert(findUsersByLocationSpy.calledAfter(getUsersDataSpy), true);
         });
 
         it('should call "findUsersByLocation()" controller method with argument user lacation "New York".', function () {
             chai.assert(findUsersByLocationSpy.calledWith("New York"), true);
+        });
+
+        it('should not call "findUsersByLocation()" controller method with argument user lacation "new jersey".', function () {
+            chai.assert(findUsersByLocationSpy.neverCalledWith("new jersey"), false);
         });
 
         it('Users with location New York should exist', function () {
